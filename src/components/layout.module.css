@@ -3,3 +3,13 @@
 	max-width: 36rem;
 	padding: 0 1rem;
 }
+
+.header {
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+}
+
+.backToHome {
+	margin: 3rem 0 0;
+}

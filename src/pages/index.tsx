@@ -1,32 +1,60 @@
-import Head from 'next/head';
-import Image from 'next/image';
-import { Inter } from 'next/font/google';
-import styles from '@/styles/Home.module.css';
+import utilStyles from '@/styles/utils.module.css';
 
+import { Inter } from 'next/font/google';
+import Head from 'next/head';
 import Link from 'next/link';
 
-import ProfilePic from '@/components/profile-pic';
+import Layout, { siteTitle } from '@/components/layout';
+
+import { getSortedPostsData } from '../lib/posts';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export default function Home() {
+export async function getStaticProps() {
+	const allPostsData = getSortedPostsData();
+	return {
+		props: {
+			allPostsData,
+		},
+	};
+}
+
+export default function Home({ allPostsData }: any) {
 	return (
-		<>
+		<Layout home>
 			<Head>
-				<title>Next Blog</title>
-				<meta name="description" content="The Next Blog" />
-				<meta name="viewport" content="width=device-width, initial-scale=1" />
-				<link rel="icon" href="/favicon.ico" />
+				<title>{siteTitle}</title>
 			</Head>
-			<main className={styles.main}>
-				<div className={styles.center}>
-					<h1>
-						Hello World, read the{' '}
-						<Link href="/posts/first-post">first post</Link>
-					</h1>
-					<ProfilePic />
-				</div>
-			</main>
-		</>
+			<section className={utilStyles.headingMd}>
+				<p>Freckled Latino. Native Texan. Software Engineer.</p>
+				<p>
+					Find me on <a href="https://twitter.com/_kafkaesc">Twitter</a> or{' '}
+					<a href="https://github.com/kafkaesc">GitHub</a>.
+				</p>
+				<p>
+					(This is a sample website. There is more to learn from the{' '}
+					<a href="https://nextjs.org/learn">the Next.js tutorial</a>.)
+				</p>
+				{/*<p>
+					&gt; <Link href="/posts/first-post">First post</Link>
+				</p>*/}
+			</section>
+			<section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
+				<h2 className={utilStyles.headingLg}>Articles</h2>
+				<ul>
+					{allPostsData.map(({ date, id, title }: any) => {
+						return (
+							<li className={utilStyles.listItem} key={id}>
+								{title}
+								<br />
+								{id}
+								<br />
+								{date}
+							</li>
+						);
+					})}
+				</ul>
+			</section>
+		</Layout>
 	);
 }
